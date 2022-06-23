@@ -1,7 +1,30 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
+/*****************************************************************************************************************************************
+ * MongoDB config
+ */
+if (process.argv.length < 3) {
+  console.log("give password as argument");
+  process.exit(1);
+}
+
+const password = process.argv[2];
+
+const url = `mongodb+srv://fullstack:${password}@cluster0.prbkb.mongodb.net/PhoneBook?retryWrites=true&w=majority`;
+
+mongoose.connect(url);
+
+const personSchema = {
+  name: String,
+  number: String,
+};
+
+const Person = mongoose.model("Person", personSchema);
+
+/****************************************************************************************************************************************/
 const app = express();
 
 app.use(express.static("build"));
