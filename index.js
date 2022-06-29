@@ -1,30 +1,10 @@
+require('dotenv').config()
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const mongoose = require("mongoose");
+const Person = require('./models/person');
+const { Mongoose } = require('mongoose');
 
-/*****************************************************************************************************************************************
- * MongoDB config
- */
-if (process.argv.length < 3) {
-  console.log("give password as argument");
-  process.exit(1);
-}
-
-const password = process.argv[2];
-
-const url = `mongodb+srv://fullstack:${password}@cluster0.prbkb.mongodb.net/PhoneBook?retryWrites=true&w=majority`;
-
-mongoose.connect(url);
-
-const personSchema = {
-  name: String,
-  number: String,
-};
-
-const Person = mongoose.model("Person", personSchema);
-
-/****************************************************************************************************************************************/
 const app = express();
 
 app.use(express.static("build"));
@@ -42,79 +22,86 @@ app.use(
   )
 );
 
-let persons = [
-  {
-    name: "Arto Hellas",
-    number: "040-123456",
-    id: 1,
-  },
-  {
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-    id: 2,
-  },
-  {
-    name: "Dan Abramov",
-    number: "12-43-234345",
-    id: 3,
-  },
-  {
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-    id: 4,
-  },
-];
-
-app.get("/info", (req, res) => {
-  let resString = `<p>Phonebook has info for ${persons.length} people</p>`;
-  const currentDate = new Date();
-  resString += currentDate.toDateString() + " " + currentDate.toTimeString();
-  res.send(resString);
+app.get("/info", (request, response, next) => {
+  Person.count().then(count => {
+    let resString = `<p>Phonebook has info for ${count} people</p>`;
+    const currentDate = new Date();
+    resString += currentDate.toDateString() + " " + currentDate.toTimeString();
+    response.send(resString);
+  })
 });
 
-app.get("/api/persons", (req, res) => {
-  res.json(persons);
+app.get("/api/persons", (request, response) => {
+  Person.find({}).then((people) => response.json(people))
 });
 
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
-  const person = persons.find((person) => person.id == id);
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(404).end();
-  }
+  Person.findById(id).then(person => {
+
+    if (person) {
+      response.json(person);
+    } else {
+      response.status(404).end();
+    }
+  })
+    .catch(error => next(error))
 });
 
-app.post("/api/persons/", (request, response) => {
+app.post("/api/persons/", (request, response, next) => {
   const body = request.body;
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
+  }
 
-  // check missing params
-  if (!body.name || !body.number) {
-    return response.status(400).json({ error: "name or number missing" });
-  }
-  // check unique
-  if (persons.find((p) => p.name === body.name)) {
-    return response.status(400).json({ error: "name must be unique" });
-  }
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  });
+
+  person.save().then((savedPerson) => {
+    response.json(savedPerson)
+  })
+    .catch(error => next(error))
+});
+
+app.put("/api/persons/:id", (request, response, next) => {
+  const body = request.body
 
   const person = {
     name: body.name,
     number: body.number,
-    id: Math.floor(Math.random(4000) * 4000),
-  };
-  persons = persons.concat(person);
-
-  response.json(person);
-});
+  }
+  const id = request.params.id
+  Person.findByIdAndUpdate(id, person, { new: true })
+    .then(updatedPerson => { response.json(updatedPerson) })
+    .catch(error => next(error))
+})
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  persons = persons.filter((person) => person.id !== id);
-  response.status(204).end();
+  person.findByIdAndDelete(request.params.id).then((result) => {
+    response.status(204).end();
+  })
+    .catch((error) => next(error))
 });
 
-const PORT = process.env.PORT || 3001;
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
+
+const errorhandler = (error, request, response, next) => {
+  console.error(error.message);
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+  next(error)
+}
+app.use(errorhandler)
+
+//##############################################################
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
