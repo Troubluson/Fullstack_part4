@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd ../part2/phonebook/ && npm run build && cp -r build ../../part4repo",
     "deploy": "git push heroku master",
@@ -17,8 +17,10 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "express": "^4.17.2",
+    "lodash": "^4.17.21",
     "mongoose": "^6.1.5",
     "morgan": "^1.10.0"
   },
@@ -26,6 +28,11 @@
     "eslint": "^8.18.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.26.0",
-    "nodemon": "^2.0.15"
+    "jest": "^28.1.2",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.4"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

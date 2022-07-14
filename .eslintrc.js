@@ -3,6 +3,7 @@ module.exports = {
     'commonjs': true,
     'es2021': true,
     'node': true,
+    'jest': true,
   },
   'extends': [
     'google',
@@ -10,6 +11,5 @@ module.exports = {
   'parserOptions': {
     'ecmaVersion': 'latest',
   },
-  'rules': {
-  },
+
 };
