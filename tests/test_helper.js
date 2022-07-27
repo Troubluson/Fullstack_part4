@@ -1,3 +1,5 @@
+const Blog = require('../models/Blog');
+
 const listWithOneBlog = [
   {
     _id: '5a422aa71b54a676234d17f8',
@@ -9,7 +11,7 @@ const listWithOneBlog = [
   },
 ];
 
-const blogs = [
+const listWithSeveralBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
@@ -60,4 +62,24 @@ const blogs = [
   },
 ];
 
-module.exports = {listWithOneBlog, blogs};
+const nonExistingId = async () => {
+  const blog = new Blog({
+    title: 'NonExisting', author: 'No One', url: 'Missing.html', likes: 0,
+  });
+  await blog.save();
+  await blog.remove();
+
+  return blog._id.toString();
+};
+
+const blogsInDb = async () => {
+  const notes = await Blog.find({});
+  return notes.map((blog) => blog.toJSON());
+};
+
+module.exports = {
+  listWithOneBlog,
+  listWithSeveralBlogs,
+  nonExistingId,
+  blogsInDb};
+

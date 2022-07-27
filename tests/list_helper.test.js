@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 const listHelper = require('../utils/list_helper');
-const {listWithOneBlog, blogs} = require('blogs');
+const helper = require('./test_helper');
 
 test('dummy returns one', () => {
   const emptyList = [];
@@ -12,20 +12,20 @@ test('dummy returns one', () => {
 
 describe('total likes', () => {
   test('when list has only one blog, equals the likes of that', () => {
-    const result = listHelper.totalLikes(listWithOneBlog);
+    const result = listHelper.totalLikes(helper.listWithOneBlog);
     expect(result).toBe(5);
   });
 
 
   test('when list has several entries, equals the likes of their sum', () => {
-    const result = listHelper.totalLikes(blogs);
+    const result = listHelper.totalLikes(helper.listWithSeveralBlogs);
     expect(result).toBe(36);
   });
 });
 
 describe('favourite blog', () => {
   test('when list has only one blog, equals to that', () => {
-    const result = listHelper.favoriteBlog(listWithOneBlog);
+    const result = listHelper.favoriteBlog(helper.listWithOneBlog);
     const expectedBlog = {
       title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
@@ -36,7 +36,7 @@ describe('favourite blog', () => {
 
 
   test('when list has several entries, equals the one with most likes', () => {
-    const result = listHelper.favoriteBlog(blogs);
+    const result = listHelper.favoriteBlog(helper.listWithSeveralBlogs);
     const expectedBlog = {
       title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
@@ -48,7 +48,7 @@ describe('favourite blog', () => {
 
 describe('most blogs', () => {
   test('when list has only one blog, equals to its author', () => {
-    const result = listHelper.mostBlogs(listWithOneBlog);
+    const result = listHelper.mostBlogs(helper.listWithOneBlog);
     const expectedResult = {
       author: 'Edsger W. Dijkstra',
       blogs: 1,
@@ -58,7 +58,7 @@ describe('most blogs', () => {
 
 
   test('when list has several entries, equals the one with most blogs', () => {
-    const result = listHelper.mostBlogs(blogs);
+    const result = listHelper.mostBlogs(helper.listWithSeveralBlogs);
     const expectedBlog = {
       author: 'Robert C. Martin',
       blogs: 3,
@@ -70,7 +70,7 @@ describe('most blogs', () => {
 
 describe('author with most likes', () => {
   test('when list has only one blog, equals to its author and its likes', () => {
-    const result = listHelper.mostLikes(listWithOneBlog);
+    const result = listHelper.mostLikes(helper.listWithOneBlog);
     const expectedResult = {
       author: 'Edsger W. Dijkstra',
       likes: 5,
@@ -80,7 +80,7 @@ describe('author with most likes', () => {
 
 
   test('when list has several entries, equals the author with most likes', () => {
-    const result = listHelper.mostLikes(blogs);
+    const result = listHelper.mostLikes(helper.listWithSeveralBlogs);
     const expectedBlog = {
       author: 'Edsger W. Dijkstra',
       likes: 17,
