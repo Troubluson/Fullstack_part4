@@ -20,11 +20,8 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "express": "^4.17.2",
-<<<<<<< HEAD
     "express-async-errors": "^3.1.1",
-=======
     "jsonwebtoken": "^8.5.1",
->>>>>>> master
     "lodash": "^4.17.21",
     "mongoose": "^6.1.5",
     "morgan": "^1.10.0"
