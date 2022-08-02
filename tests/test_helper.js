@@ -64,7 +64,10 @@ const listWithSeveralBlogs = [
 
 const nonExistingId = async () => {
   const blog = new Blog({
-    title: 'NonExisting', author: 'No One', url: 'Missing.html', likes: 0,
+    title: 'NonExisting',
+    author: 'No One',
+    url: 'Missing.html',
+    likes: 0,
   });
   await blog.save();
   await blog.remove();
@@ -81,5 +84,5 @@ module.exports = {
   listWithOneBlog,
   listWithSeveralBlogs,
   nonExistingId,
-  blogsInDb};
-
+  blogsInDb,
+};

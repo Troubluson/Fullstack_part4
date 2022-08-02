@@ -1,4 +1,3 @@
-
 const _ = require('lodash');
 
 const dummy = (blogs) => {
@@ -22,7 +21,10 @@ const favoriteBlog = (blogs) => {
 const mostBlogs = (blogs) => {
   const blogsByAuthor = _.groupBy(blogs, (blog) => blog.author);
   // eslint-disable-next-line max-len
-  const authorWithMostBlogs = _.maxBy(Object.keys(blogsByAuthor), (author) => blogsByAuthor[author].length);
+  const authorWithMostBlogs = _.maxBy(
+      Object.keys(blogsByAuthor),
+      (author) => blogsByAuthor[author].length,
+  );
   const blogAmount = blogsByAuthor[authorWithMostBlogs].length;
   // console.log(mostBlogs);
   return {author: authorWithMostBlogs, blogs: blogAmount};
@@ -38,5 +40,9 @@ const mostLikes = (blogs) => {
 };
 
 module.exports = {
-  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes,
+  dummy,
+  totalLikes,
+  favoriteBlog,
+  mostBlogs,
+  mostLikes,
 };
