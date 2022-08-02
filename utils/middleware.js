@@ -12,15 +12,15 @@ const errorHandler = (error, req, res, next) => {
   next(error);
 };
 
-const getTokenFrom = (request) => {
+const tokenExtractor = (request, response, next) => {
   const authorization = request.get('Authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7);
+    request.token = authorization.substring(7);
   }
-  return null;
+  next();
 };
 
 module.exports = {
   errorHandler,
-  getTokenFrom,
+  tokenExtractor,
 };
