@@ -2,19 +2,13 @@
 const supertest = require('supertest');
 const app = require('../app');
 const User = require('../models/User');
-const helper = require('../utils/user_helper');
+const helper = require('./user_test_helper');
 
 const api = supertest(app);
 
-const initialUser = {
-  username: 'firstUser',
-  name: 'first user',
-  passwordHash: 'hash',
-};
-
 beforeEach(async () => {
   await User.deleteMany({});
-  await User.insertMany(initialUser);
+  await User.insertMany(helper.initialUser);
 });
 
 describe('Adding new users', () => {
@@ -35,7 +29,7 @@ describe('Adding new users', () => {
     expect(usersAfterPost).toHaveLength(initialUsers.length + 1);
   });
 
-  test('Too short password gives 400', async () => {
+  test('A too short password gives fails with status code 400', async () => {
     const userShortPass = {
       username: 'testuser1',
       name: 'user test',
@@ -50,7 +44,7 @@ describe('Adding new users', () => {
     );
   });
 
-  test('Too short username gives 400', async () => {
+  test('A too short username fails with status code 400', async () => {
     const userShortUsername = {
       username: 'us',
       name: 'user test',
@@ -66,13 +60,17 @@ describe('Adding new users', () => {
     );
   });
 
-  test('Duplicate username gives status code 400 and appropriate error', async () => {
-    const duplicateUser = {...initialUser, password: 'pass'};
+  test('A Duplicate username gives status code 400 and appropriate error', async () => {
+    const duplicateUser = {...helper.initialUser, password: 'pass'};
     delete duplicateUser.passwordHash;
     const response = await api
         .post('/api/users')
         .send(duplicateUser)
         .expect(400);
     expect(response.body.error).toContain('Username must be unique');
+  });
+
+  test('A missing token gives status code 401', async () => {
+    expect();
   });
 });

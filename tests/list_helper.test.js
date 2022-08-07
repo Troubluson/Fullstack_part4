@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 const listHelper = require('../utils/list_helper');
-const helper = require('./test_helper');
+const helper = require('./blog_test_helper');
 
 test('dummy returns one', () => {
   const emptyList = [];
@@ -15,7 +15,6 @@ describe('total likes', () => {
     const result = listHelper.totalLikes(helper.listWithOneBlog);
     expect(result).toBe(5);
   });
-
 
   test('when list has several entries, equals the likes of their sum', () => {
     const result = listHelper.totalLikes(helper.listWithSeveralBlogs);
@@ -33,7 +32,6 @@ describe('favourite blog', () => {
     };
     expect(result).toEqual(expectedBlog);
   });
-
 
   test('when list has several entries, equals the one with most likes', () => {
     const result = listHelper.favoriteBlog(helper.listWithSeveralBlogs);
@@ -56,7 +54,6 @@ describe('most blogs', () => {
     expect(result).toEqual(expectedResult);
   });
 
-
   test('when list has several entries, equals the one with most blogs', () => {
     const result = listHelper.mostBlogs(helper.listWithSeveralBlogs);
     const expectedBlog = {
@@ -77,7 +74,6 @@ describe('author with most likes', () => {
     };
     expect(result).toEqual(expectedResult);
   });
-
 
   test('when list has several entries, equals the author with most likes', () => {
     const result = listHelper.mostLikes(helper.listWithSeveralBlogs);

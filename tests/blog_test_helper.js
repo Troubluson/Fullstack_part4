@@ -1,4 +1,13 @@
 const Blog = require('../models/Blog');
+const jwt = require('jsonwebtoken');
+
+const testUser = {
+  _id: '5a422aa71b54a676234d17f8',
+  username: 'Niskis',
+  name: 'it is me',
+  passwordHash: 'passhash',
+  __v: 0,
+};
 
 const listWithOneBlog = [
   {
@@ -18,6 +27,7 @@ const listWithSeveralBlogs = [
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
     likes: 7,
+    user: testUser._id,
     __v: 0,
   },
   {
@@ -26,6 +36,7 @@ const listWithSeveralBlogs = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
+    user: testUser._id,
     __v: 0,
   },
   {
@@ -34,6 +45,7 @@ const listWithSeveralBlogs = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 12,
+    user: testUser._id,
     __v: 0,
   },
   {
@@ -42,6 +54,7 @@ const listWithSeveralBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
     likes: 10,
+    user: testUser._id,
     __v: 0,
   },
   {
@@ -50,6 +63,7 @@ const listWithSeveralBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
+    user: testUser._id,
     __v: 0,
   },
   {
@@ -58,6 +72,7 @@ const listWithSeveralBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
+    user: testUser._id,
     __v: 0,
   },
 ];
@@ -80,9 +95,19 @@ const blogsInDb = async () => {
   return notes.map((blog) => blog.toJSON());
 };
 
+const getTokenFor = async (user) => {
+  const token = jwt.sign(
+      {username: user.username, id: user._id},
+      process.env.SECRET,
+  );
+  return token;
+};
+
 module.exports = {
   listWithOneBlog,
   listWithSeveralBlogs,
   nonExistingId,
   blogsInDb,
+  testUser,
+  getTokenFor,
 };

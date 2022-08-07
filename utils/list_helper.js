@@ -12,10 +12,8 @@ const favoriteBlog = (blogs) => {
   const likes = blogs.map((blog) => blog.likes);
   const maxLikes = Math.max(...likes);
   const favBlog = blogs.find((blog) => blog.likes === maxLikes);
-  delete favBlog._id;
-  delete favBlog.url;
-  delete favBlog.__v;
-  return favBlog;
+
+  return {title: favBlog.title, author: favBlog.author, likes: favBlog.likes};
 };
 
 const mostBlogs = (blogs) => {

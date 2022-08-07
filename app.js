@@ -5,6 +5,7 @@ const cors = require('cors');
 const config = require('./utils/config');
 const blogRouter = require('./controllers/Blogs');
 const userRouter = require('./controllers/Users');
+const loginRouter = require('./controllers/Login');
 const middleware = require('./utils/middleware');
 const mongoose = require('mongoose');
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(middleware.tokenExtractor);
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
+app.use('/api/login', loginRouter);
 app.use(middleware.errorHandler);
 
 module.exports = app;

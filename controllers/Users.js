@@ -9,7 +9,6 @@ userRouter.get('/', async (request, response, next) => {
     title: 1,
     author: 1,
   });
-  console.log(users);
   response.json(users);
 });
 
@@ -27,7 +26,6 @@ userRouter.post('/', async (request, response, next) => {
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const user = new User({username, name, passwordHash});
-  console.log(user.toJSON());
 
   const savedUser = await user.save();
   response.status(201).json(savedUser);
